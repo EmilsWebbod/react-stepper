@@ -1,5 +1,16 @@
 # React stepper
 
+## Install
+```
+yarn add @ewb/react-stepper
+npm install @ewb/react-stepper
+```
+
+## playground
+```
+https://codesandbox.io/s/k28p9025or
+```
+
 ## How to use
 
 ### Provider
