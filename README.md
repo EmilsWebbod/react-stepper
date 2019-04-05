@@ -1,4 +1,4 @@
-#React stepper
+# React stepper
 
 ## How to use
 
