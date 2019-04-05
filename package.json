@@ -1,0 +1,60 @@
+{
+  "name": "@ewb/react-stepper",
+  "version": "1.0.0",
+  "description": "React stepper hook. Step trough components in series with a hook that uses a provider",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "start": "yarn build:watch",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "postversion": "git push && git push --tags",
+    "prepublish": "npm run build",
+    "preversion": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://https://github.com/EmilsWebbod/react-stepper.git"
+  },
+  "keywords": [
+    "typescript",
+    "ts",
+    "react",
+    "npm",
+    "useStepper",
+    "stepper",
+    "series",
+    "hook"
+  ],
+  "author": "Emil A. Olsen",
+  "bugs": {
+    "url": "https://github.com/ludens-reklamebyra/react-stepper/issues"
+  },
+  "homepage": "https://github.com/ludens-reklamebyra/react-stepper#readme",
+  "files": [
+    "lib"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.3",
+    "@types/react": "^16.8.10",
+    "husky": "^1.2.0",
+    "prettier": "^1.15.2",
+    "pretty-quick": "^1.10.0",
+    "react": "^16.8.6",
+    "typescript": "^3.4.1"
+  },
+  "dependencies": {
+    "@ewb/react-serial-state": "^1.0.3"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "resolutions": {
+    "@types/react": "^16.8.10"
+  }
+}
