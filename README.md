@@ -6,6 +6,7 @@
 ```
 import { StepperProvider } from '@ewb/react-stepper';
 
+// props: "start" will automatically step into the first action component
 function App() {
     return (
         <StepperProvider start>
