@@ -6,6 +6,7 @@ export type StepAction = () => Promise<{}> | void;
 export type StepWatcherAction = (state: StepperState) => Promise<{}> | void;
 
 export interface StepperOpts {
+  index?: number;
   stepDelay?: number;
   state?: [any, (state: any) => void];
   ref?: MutableRefObject<HTMLDivElement | null>;
@@ -83,10 +84,14 @@ function StepperProvider({
   }, [state.activeStep]);
 
   function addStep(action: StepAction, opts?: StepperOpts) {
-    state.steps.push({
-      action,
-      ...opts
-    });
+    const step = {action, ...opts};
+
+    if (opts && opts.index) {
+      state.steps.splice(opts.index, 0, step);
+    } else {
+      state.steps.push(step);
+    }
+
     setState(state);
   }
 
