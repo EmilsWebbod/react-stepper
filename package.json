@@ -1,6 +1,6 @@
 {
   "name": "@ewb/react-stepper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React stepper hook. Step trough components in series with a hook that uses a provider",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
