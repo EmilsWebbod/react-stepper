@@ -6,6 +6,7 @@ export type StepAction = () => Promise<{}> | void;
 export type StepWatcherAction = (state: StepperState) => Promise<{}> | void;
 
 export interface StepperOpts {
+  id?: string;
   index?: number;
   stepDelay?: number;
   state?: [any, (state: any) => void];
@@ -64,26 +65,38 @@ const StepperContext = React.createContext<StepperContextProps>({
 
 interface ProviderProps extends JSX.ElementChildrenAttribute {
   start?: boolean;
+  runNew?: boolean;
 }
 
 function StepperProvider({
   start,
+  runNew,
   children
 }: ProviderProps) {
   const [state, setState] = useSerialState(defaultState(-1));
   const runningStep = useRef(false);
 
   useEffect(() => {
-    if (start) {
-      nextStep().then();
+    if (state.steps.length > 0) {
+      if (start && !state.completed) {
+        nextStep().then();
+      }
+
+      if (runNew && !runningStep.current && state.completed) {
+        nextStep().then();
+      }
     }
-  }, []);
+  }, [state.steps.length]);
 
   useEffect(() => {
     state.watchers.map(runWatch(state));
   }, [state.activeStep]);
 
   function addStep(action: StepAction, opts?: StepperOpts) {
+    if (opts && opts.id && state.steps.some(x => x.id === opts.id)) {
+      return;
+    }
+
     const step = {action, ...opts};
 
     if (opts && opts.index) {
@@ -148,8 +161,10 @@ function StepperProvider({
       await activeStep.preNext();
     }
 
+    console.log(current, next, state.steps.length, activeStep);
+
     if (next >= state.steps.length) {
-      newState.activeStep = state.steps.length;
+      newState.activeStep = state.steps.length - 1;
       newState.completed = true;
       setState(newState);
       runningStep.current = false;
@@ -201,21 +216,23 @@ async function runStep(step: StepperStep) {
     await step.preAction();
   }
 
-  async function runAction(res: () => void, rej: () => void) {
+  return new Promise(async (res) => {
+    if (step.stepDelay) {
+      setTimeout(() => runAction(res), step.stepDelay)
+    } else {
+      await runAction(res);
+    }
+  });
+
+  async function runAction(res: () => void) {
     await step.action();
+
     if (typeof step.postAction === 'function') {
       await step.postAction();
     }
+
     res();
   }
-
-  return new Promise(async (res, rej) => {
-    if (step.stepDelay) {
-      setTimeout(() => runAction(res, rej), step.stepDelay)
-    } else {
-      await runAction(res, rej);
-    }
-  })
 }
 
 export { StepperContext, StepperProvider };
